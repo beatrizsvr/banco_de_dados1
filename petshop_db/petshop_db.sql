@@ -1,3 +1,6 @@
+-> Item 1
+-> Item 2
+	
 CREATE TABLE CLIENTES(
 	ID_CLIENTE INT PRIMARY KEY NOT NULL,
 	NOME_CLIENTE VARCHAR(50) NOT NULL,
@@ -10,3 +13,111 @@ CREATE TABLE CLIENTES(
 	CEP_END CHAR(8) NOT NULL,
 	UF_END CHAR(2) NOT NULL
 );
+
+
+CREATE TABLE PETS (
+	ID_PET INT PRIMARY KEY NOT NULL,
+	NOME_PET VARCHAR(30) NOT NULL,
+	SEXO CHAR(1) NOT NULL CHECK (SEXO = 'F' OR SEXO = 'M'),
+	DT_NASC DATE NOT NULL,
+	TIPO VARCHAR(20) NOT NULL,
+	RACA VARCHAR(30) NOT NULL,
+	COR VARCHAR(20) NOT NULL DEFAULT 'NÃO INFORMADA',
+	ID_CLIENTE INT NOT NULL,
+	PRIMARY KEY (ID_PET, ID_CLIENTE),
+	CONSTRAINT FK_PETS_CLIENTE FOREIGN KEY (ID_CLIENTE) REFERENCES CLIENTES (ID_CLIENTE) ON DELETE CASCADE	
+);
+
+CREATE TABLE TELEFONES (
+	ID_TELEFONE SERIAL NOT NULL,
+	NR_TELEFONE VARCHAR(50) NOT NULL,
+	ID_CLIENTE INT NOT NULL,
+	PRIMARY KEY (ID_TELEFONE, ID_CLIENTE),
+	CONSTRAINT FK_TELEFONES_CLIENTE FOREIGN KEY (ID_TELEFONE) REFERENCES CLIENTES (ID_CLIENTE) ON DELETE CASCADE
+);
+
+
+-> Item 3.a
+
+INSERT INTO CLIENTES(ID_CLIENTE, NOME_CLIENTE, CPF_CLIENTE, RUA_END, NUMERO_END, COMPLEMENTO_END, BAIRRO_END, MUNICIPIO_END, CEP_END, UF_END)
+	VALUES  (1, 'Maira Silveira', '04369299', 'Av. Juscelino Kubitschek', '2213', '222', 'Areal', 'Pelotas', '9006430', 'RS'),
+			(2, 'Jeferson Oliveira', '12398745', 'Av. Bento Gonçalves', '3012', 'Casa', 'Centro', 'Pelotas', '9606430', 'RS'),
+			(3, 'Ana Carolina Dias', '65412398', 'Rua Marcilio Dias', '603', 'Ap221', 'Centro', 'Pelotas', '9606230', 'RS'),
+			(4, 'Rosane Alves', '41265232', 'Rua Conde de Porto Alegre', '555', 'Casa', 'Porto', 'Pelotas', '9605430', 'RS'),
+			(5, 'Roberto Cardoso', '03256498', 'Rua Raimundo Correia', '663', 'Casa', 'Três Vendas', 'Pelotas', '9609830', 'RS');
+
+
+-> Item 3.b
+
+INSERT INTO PETS(ID_PET, NOME_PET, SEXO, DT_NASC, TIPO, RACA, COR, ID_CLIENTE)
+	VALUES 	(1, 'Nick', 'F', '12/11/2006', 'Cachorro', 'Poodle', 'Branco', 1),
+			(2, 'Jack', 'M', '08/10/2011', 'Gato', 'Pastor-alemão', 'Preto', 2),
+			(3, 'Bob', 'M', '03/11/2018', 'Cachorro', 'Buldogue', 'Cinza', 3),
+			(4, 'Bel', 'F', '09/04/2019', 'Gato', 'Maine Coon', 'Amarelo', 4),
+			(5, 'Mia', 'F', '02/04/2023', 'Gato', 'Siamês', 'Cinza e branco', 4),
+			(6, 'Marlo', 'M', '01/07/2022', 'Gato', 'Siamês', 'Preto e branco', 5),
+			(7, 'Farofa', 'M', '10/06/2020', 'Cachorro', 'Pitbull', 'Preto', 5),
+			(8, 'Lipe', 'M', '07/08/2016', 'Cachorro', 'Chihuahua', 'Cinza', 5);
+
+
+-> Item 3.c
+
+INSERT INTO TELEFONES(NR_TELEFONE, ID_CLIENTE)
+	VALUES 	('12345678999', 1),
+			('12334678977', 1),
+			('12345678944', 2),
+			('12345678966', 3),
+			('12345678933', 4);
+
+
+-> Item 4
+
+SELECT * FROM CLIENTES;
+
+
+-> Item 5
+
+SELECT NOME_PET
+FROM PETS 
+WHERE SEXO = 'M'
+ORDER BY NOME_PET ASC;
+
+
+-> Item 6
+
+SELECT NOME_PET, DT_NASC
+FROM PETS
+ORDER BY DT_NASC DESC;
+
+
+-> Item 7
+
+SELECT NOME_PET
+FROM PETS
+WHERE DT_NASC BETWEEN '08/10/2011' AND '02/04/2023';
+
+
+-> Item 8
+
+SELECT NOME_CLIENTE, RUA_END, NUMERO_END, COMPLEMENTO_END, BAIRRO_END, MUNICIPIO_END, CEP_END, UF_END
+FROM CLIENTES
+WHERE COMPLEMENTO_END IS NULL;
+
+
+-> Item 9
+
+SELECT NOME_PET
+FROM PETS
+WHERE NOME_PET LIKE 'A%';
+
+
+-> Item 10
+
+SELECT DISTINCT MUNICIPIO_END
+FROM CLIENTES;
+
+
+-> Item 11
+
+SELECT UPPER (NOME_CLIENTE)
+FROM CLIENTES;
